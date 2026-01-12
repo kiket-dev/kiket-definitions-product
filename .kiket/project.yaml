@@ -1,0 +1,11 @@
+model_version: "1.0"
+project:
+  id: product
+  name: Product Development
+  version: 1.0.0
+  description: Feature requests, roadmap planning, and product development workflows.
+
+  extensions:
+    optional:
+      - slack
+      - github

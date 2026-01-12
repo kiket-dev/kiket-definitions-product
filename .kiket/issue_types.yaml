@@ -1,0 +1,28 @@
+model_version: "1.0"
+
+issue_types:
+  feature:
+    name: Feature
+    description: Product feature request or initiative
+    icon: "✨"
+    color: "#06B6D4"
+    workflow: product
+    fields:
+      - key: feature_type
+        type: enum
+        label: Type
+        options: [new_feature, enhancement, technical_debt, spike]
+      - key: effort
+        type: enum
+        label: Effort
+        options: [XS, S, M, L, XL]
+      - key: impact
+        type: enum
+        label: Impact
+        options: [low, medium, high, critical]
+      - key: requesting_customer
+        type: string
+        label: Requesting Customer
+      - key: release_target
+        type: string
+        label: Target Release

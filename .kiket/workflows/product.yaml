@@ -1,0 +1,112 @@
+model_version: "1.0"
+workflow:
+  id: product
+  name: Product Development
+  version: 1.0.0
+  description: Feature lifecycle from idea to release.
+
+states:
+  idea:
+    type: initial
+    category: pending
+    metadata:
+      label: Idea
+      color: secondary
+      icon: "💡"
+      description: Feature idea submitted.
+    on_enter:
+      - action: ai_analyze
+        agent: ai.product.effort_estimator
+        store_result_in: custom_fields.effort
+      - action: ai_analyze
+        agent: ai.product.similar_finder
+        store_result_in: custom_fields.similar_features
+
+  evaluating:
+    type: active
+    category: active
+    metadata:
+      label: Evaluating
+      color: info
+      icon: "🔍"
+      description: Feature being evaluated.
+
+  planned:
+    type: active
+    category: active
+    metadata:
+      label: Planned
+      color: primary
+      icon: "📅"
+      description: Scheduled for development.
+
+  in_progress:
+    type: active
+    category: active
+    metadata:
+      label: In Progress
+      color: primary
+      icon: "⚙️"
+      description: Actively being developed.
+
+  review:
+    type: active
+    category: review
+    metadata:
+      label: Review
+      color: warning
+      icon: "👁️"
+      description: Awaiting review.
+    approval:
+      required: 1
+      approvers:
+        - role: product_lead
+
+  released:
+    type: final
+    category: completed
+    metadata:
+      label: Released
+      color: success
+      icon: "🚀"
+      description: Feature released.
+    on_enter:
+      - action: ai_generate
+        agent: ai.product.release_notes
+        store_result_in: comment
+      - action: notify
+        recipients:
+          roles: [product, engineering, marketing]
+        message: "🚀 Feature released: ${issue.title}"
+
+  rejected:
+    type: final
+    category: completed
+    metadata:
+      label: Rejected
+      color: secondary
+      icon: "❌"
+      description: Feature not pursued.
+
+transitions:
+  - from: idea
+    to: evaluating
+    name: Evaluate
+  - from: evaluating
+    to: planned
+    name: Add to Roadmap
+  - from: evaluating
+    to: rejected
+    name: Reject
+  - from: planned
+    to: in_progress
+    name: Start Development
+  - from: in_progress
+    to: review
+    name: Submit for Review
+  - from: review
+    to: in_progress
+    name: Request Changes
+  - from: review
+    to: released
+    name: Release

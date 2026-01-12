@@ -1,0 +1,117 @@
+model_version: "1.0"
+intake:
+  id: feature-request
+  name: Feature Request
+  description: Submit a feature request or product idea.
+  version: 1.0.0
+
+  public: true
+  slug: features/request
+
+  branding:
+    title: "Feature Request"
+    subtitle: "Help us build what matters to you."
+
+  issue:
+    type: feature
+    workflow: product
+    initial_state: idea
+    title_template: "[Feature] {{title}}"
+
+  fields:
+    - key: title
+      type: string
+      label: Feature Title
+      placeholder: "Brief title for your feature request"
+      required: true
+      max_length: 200
+      map_to: title
+
+    - key: category
+      type: enum
+      label: Category
+      required: true
+      options:
+        - value: new_feature
+          label: "New Feature"
+        - value: enhancement
+          label: "Enhancement to Existing Feature"
+        - value: integration
+          label: "Integration Request"
+        - value: ux_improvement
+          label: "UX/UI Improvement"
+        - value: performance
+          label: "Performance Improvement"
+        - value: other
+          label: "Other"
+      map_to: custom_fields.category
+
+    - key: problem
+      type: text
+      label: Problem Statement
+      placeholder: "What problem does this feature solve? What's your current pain point?"
+      required: true
+      map_to: custom_fields.problem
+
+    - key: description
+      type: markdown
+      label: Proposed Solution
+      placeholder: |
+        Describe your ideal solution:
+        - What would it do?
+        - How would it work?
+        - What would success look like?
+      required: true
+      map_to: description
+
+    - key: use_case
+      type: text
+      label: Use Case
+      placeholder: "Describe a specific scenario where you would use this feature"
+      required: true
+      map_to: custom_fields.use_case
+
+    - key: priority
+      type: enum
+      label: How important is this to you?
+      required: true
+      options:
+        - value: critical
+          label: "Critical - Blocking my work"
+        - value: high
+          label: "High - Significant impact on my workflow"
+        - value: medium
+          label: "Medium - Would be nice to have"
+        - value: low
+          label: "Low - Minor improvement"
+      map_to: custom_fields.user_priority
+
+    - key: company
+      type: string
+      label: Company (optional)
+      placeholder: "Your company name"
+      required: false
+      map_to: custom_fields.requested_by
+
+    - key: attachments
+      type: file
+      label: Mockups or Examples
+      required: false
+      multiple: true
+      max_size: 25MB
+
+  confirmation:
+    title: "Feature Request Submitted"
+    message: |
+      Thank you for your feature request!
+
+      **Request ID:** #{{issue.id}}
+
+      Our product team reviews all requests and uses them to inform our roadmap.
+      You can track the status of your request in our public roadmap.
+
+  notifications:
+    on_submit:
+      - type: slack
+        channel: "#product-feedback"
+        message: "💡 New feature request: {{title}} (Priority: {{priority}})"

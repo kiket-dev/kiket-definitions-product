@@ -1,0 +1,61 @@
+model_version: "1.0"
+id: ai.product.release_notes
+version: 1.0.0
+name: Release Notes Generator
+description: Generate release notes for completed features.
+
+prompt: |
+  Generate release notes for this released feature.
+
+  **Feature:**
+  - Title: {{issue.title}}
+  - Description: {{issue.description}}
+  - Category: {{issue.custom_fields.category}}
+  - Target Users: {{issue.custom_fields.target_users}}
+
+  **Implementation Details:**
+  {{#each issue.comments}}
+  {{#if this.is_technical}}
+  - {{this.body}}
+  {{/if}}
+  {{/each}}
+
+  **Related Issues:**
+  {{#each context.related_issues}}
+  - #{{this.id}}: {{this.title}}
+  {{/each}}
+
+  Generate release notes in multiple formats:
+
+  ## Customer-Facing (for changelog)
+  - Clear, benefit-focused headline
+  - 2-3 sentences explaining what users can now do
+  - Any action required by users
+
+  ## Internal (for team)
+  - Technical summary
+  - Breaking changes (if any)
+  - Migration notes
+  - Known limitations
+
+  ## Social Media (for marketing)
+  - Tweet-length announcement
+  - Key benefit highlight
+
+capabilities:
+  - release_notes_generation
+  - content_creation
+
+context:
+  required:
+    - issues
+  optional:
+    - documents
+
+human_in_loop:
+  required: true
+  reason: Release notes should be reviewed before publication
+
+metadata:
+  output_format: markdown
+  max_tokens: 1200

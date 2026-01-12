@@ -1,0 +1,81 @@
+model_version: "1.0"
+id: ai.product.effort_estimator
+version: 1.0.0
+name: Effort Estimator
+description: Estimate development effort for feature requests.
+
+prompt: |
+  Estimate the effort required for this feature request.
+
+  **Feature:**
+  - Title: {{issue.title}}
+  - Description: {{issue.description}}
+  - Category: {{issue.custom_fields.category}}
+  - Requested By: {{issue.custom_fields.requested_by}}
+
+  **Codebase Context:**
+  - Tech Stack: {{context.tech_stack}}
+  - Architecture: {{context.architecture_summary}}
+
+  **Historical Data:**
+  {{#each context.similar_features}}
+  - {{this.title}}: {{this.actual_effort}} (estimated: {{this.estimated_effort}})
+  {{/each}}
+
+  Provide effort estimate:
+  - t_shirt_size: XS/S/M/L/XL
+  - story_points: Fibonacci (1, 2, 3, 5, 8, 13, 21)
+  - estimated_days: Range (min-max)
+  - confidence: low/medium/high
+  - breakdown:
+    - design: Estimated design effort
+    - frontend: Frontend development effort
+    - backend: Backend development effort
+    - testing: Testing effort
+    - documentation: Documentation effort
+  - risks: Factors that could increase effort
+  - assumptions: Key assumptions in this estimate
+
+capabilities:
+  - effort_estimation
+  - complexity_analysis
+
+context:
+  required:
+    - documents
+    - issues
+
+human_in_loop:
+  required: false
+
+metadata:
+  output_format: json
+  max_tokens: 800
+  schema:
+    type: object
+    properties:
+      t_shirt_size:
+        type: string
+        enum: [XS, S, M, L, XL]
+      story_points:
+        type: number
+      estimated_days:
+        type: object
+        properties:
+          min:
+            type: number
+          max:
+            type: number
+      confidence:
+        type: string
+        enum: [low, medium, high]
+      breakdown:
+        type: object
+      risks:
+        type: array
+        items:
+          type: string
+      assumptions:
+        type: array
+        items:
+          type: string

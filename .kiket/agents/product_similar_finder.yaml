@@ -1,0 +1,92 @@
+model_version: "1.0"
+id: ai.product.similar_finder
+version: 1.0.0
+name: Similar Feature Finder
+description: Find similar or duplicate feature requests.
+
+prompt: |
+  Find similar or duplicate feature requests.
+
+  **New Feature:**
+  - Title: {{issue.title}}
+  - Description: {{issue.description}}
+  - Category: {{issue.custom_fields.category}}
+
+  **Existing Features:**
+  {{#each context.existing_features}}
+  - #{{this.id}}: {{this.title}} ({{this.status}})
+    {{this.description}}
+  {{/each}}
+
+  Analyze and return:
+  - duplicates: Features that are essentially the same request
+  - similar: Features that overlap significantly
+  - related: Features that could be combined or affect this one
+  - recommendation: proceed/merge/defer
+  - merge_candidates: IDs of features to potentially merge with
+  - notes: Context for product team
+
+capabilities:
+  - duplicate_detection
+  - similarity_analysis
+
+context:
+  required:
+    - issues
+
+human_in_loop:
+  required: false
+
+metadata:
+  output_format: json
+  max_tokens: 800
+  context_window:
+    existing_features:
+      query: "type:feature status:!rejected"
+      similarity_threshold: 0.5
+      limit: 50
+  schema:
+    type: object
+    properties:
+      duplicates:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+            title:
+              type: string
+            similarity:
+              type: number
+      similar:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+            title:
+              type: string
+            overlap:
+              type: string
+      related:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: number
+            title:
+              type: string
+            relationship:
+              type: string
+      recommendation:
+        type: string
+        enum: [proceed, merge, defer]
+      merge_candidates:
+        type: array
+        items:
+          type: number
+      notes:
+        type: string
