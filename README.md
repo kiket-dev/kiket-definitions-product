@@ -10,6 +10,7 @@ This definition provides product management workflows including:
 - **AI Agents**: Effort estimation, similar feature detection, release notes generation
 - **Intake Form**: Public feature request submission
 - **Board**: Product roadmap board with effort swimlanes
+- **Analytics**: Backlog health, feature requests by theme, release velocity, feedback sentiment
 
 ## Structure
 
@@ -25,8 +26,11 @@ This definition provides product management workflows including:
 │   └── product_release_notes.yaml
 ├── intakes/
 │   └── feature_request.yaml
-└── boards/
-    └── product.yaml
+├── boards/
+│   └── product.yaml
+└── analytics/
+    └── dashboards/
+        └── product_health.yaml
 ```
 
 ## Installation
