@@ -2,87 +2,92 @@ model_version: "1.0"
 board:
   id: product-board
   name: Product Roadmap
+  type: kanban
   description: Feature development and product roadmap.
-  version: 1.0.0
+  workflow: product
 
-  filters:
-    issue_types:
-      - feature
-    workflows:
-      - product
+filters:
+  issue_types:
+    - feature
+  workflows:
+    - product
 
-  columns:
-    - id: ideas
-      name: Ideas
-      states:
-        - idea
-      wip_limit: null
-      color: secondary
+columns:
+  - key: ideas
+    name: Ideas
+    states:
+      - idea
+    color: secondary
 
-    - id: evaluating
-      name: Evaluating
-      states:
-        - evaluating
-      wip_limit: 10
-      color: info
+  - key: evaluating
+    name: Evaluating
+    states:
+      - evaluating
+    wip_limit: 10
+    color: info
 
-    - id: planned
-      name: Planned
-      states:
-        - planned
-      wip_limit: 15
-      color: primary
+  - key: planned
+    name: Planned
+    states:
+      - planned
+    wip_limit: 15
+    color: primary
 
-    - id: in_progress
-      name: In Progress
-      states:
-        - in_progress
-      wip_limit: 5
-      color: primary
+  - key: in_progress
+    name: In Progress
+    states:
+      - in_progress
+    wip_limit: 5
+    color: primary
 
-    - id: review
-      name: Review
-      states:
-        - review
-      wip_limit: 5
-      color: warning
+  - key: review
+    name: Review
+    states:
+      - review
+    wip_limit: 5
+    color: warning
 
-    - id: released
-      name: Released
-      states:
-        - released
-      wip_limit: null
-      color: success
+  - key: released
+    name: Released
+    states:
+      - released
+    color: success
 
-  swimlanes:
-    enabled: true
-    field: custom_fields.effort
-    values:
-      - value: XS
-        label: "XS - Quick Win"
-      - value: S
-        label: "S - Small"
-      - value: M
-        label: "M - Medium"
-      - value: L
-        label: "L - Large"
-      - value: XL
-        label: "XL - Epic"
+swimlanes:
+  enabled: true
+  field: custom_fields.effort
+  values:
+    - value: XS
+      label: "XS - Quick Win"
+    - value: S
+      label: "S - Small"
+    - value: M
+      label: "M - Medium"
+    - value: L
+      label: "L - Large"
+    - value: XL
+      label: "XL - Epic"
 
-  card_fields:
-    - title
-    - custom_fields.category
-    - custom_fields.effort
-    - custom_fields.user_priority
-    - assignee
+card_template:
+  size: compact
+  fields:
+    primary:
+      - title
+      - assignee
+    secondary:
+      - custom_fields.category
+      - custom_fields.effort
+      - custom_fields.user_priority
+  badges:
+    - type: comments_count
 
-  quick_filters:
-    - field: custom_fields.category
-      label: New Features
-      value: new_feature
-    - field: custom_fields.effort
-      label: Quick Wins
-      values: [XS, S]
-    - field: status
-      label: In Development
-      values: [in_progress, review]
+quick_filters:
+  - field: custom_fields.category
+    label: New Features
+    value: new_feature
+  - field: custom_fields.effort
+    label: Quick Wins
+    values: [XS, S]
+  - field: status
+    label: In Development
+    values: [in_progress, review]
