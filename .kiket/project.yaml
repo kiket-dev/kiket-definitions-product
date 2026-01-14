@@ -5,6 +5,15 @@ project:
   version: 1.0.0
   description: Feature requests, roadmap planning, and product development workflows.
 
+  team:
+    roles:
+      - name: pm
+        description: Product manager responsible for roadmap and priorities
+      - name: designer
+        description: UX/UI designer creating mockups and specifications
+      - name: analyst
+        description: Product analyst researching user needs and metrics
+
   extensions:
     optional:
       - slack
