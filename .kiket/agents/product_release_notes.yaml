@@ -1,61 +1,65 @@
 model_version: "1.0"
-id: ai.product.release_notes
-version: 1.0.0
-name: Release Notes Generator
-description: Generate release notes for completed features.
+agent:
+  id: ai.product.release_notes
+  version: 1.0.0
+  name: Release Notes Generator
+  description: Generate release notes for completed features.
 
-prompt: |
-  Generate release notes for this released feature.
+  prompts:
+    - role: system
+      content: |
+        Generate release notes for this released feature.
 
-  **Feature:**
-  - Title: {{issue.title}}
-  - Description: {{issue.description}}
-  - Category: {{issue.custom_fields.category}}
-  - Target Users: {{issue.custom_fields.target_users}}
+        **Feature:**
+        - Title: {{issue.title}}
+        - Description: {{issue.description}}
+        - Category: {{issue.custom_fields.category}}
+        - Target Users: {{issue.custom_fields.target_users}}
 
-  **Implementation Details:**
-  {{#each issue.comments}}
-  {{#if this.is_technical}}
-  - {{this.body}}
-  {{/if}}
-  {{/each}}
+        **Implementation Details:**
+        {{#each issue.comments}}
+        {{#if this.is_technical}}
+        - {{this.body}}
+        {{/if}}
+        {{/each}}
 
-  **Related Issues:**
-  {{#each context.related_issues}}
-  - #{{this.id}}: {{this.title}}
-  {{/each}}
+        **Related Issues:**
+        {{#each context.related_issues}}
+        - #{{this.id}}: {{this.title}}
+        {{/each}}
 
-  Generate release notes in multiple formats:
+        Generate release notes in multiple formats:
 
-  ## Customer-Facing (for changelog)
-  - Clear, benefit-focused headline
-  - 2-3 sentences explaining what users can now do
-  - Any action required by users
+        ## Customer-Facing (for changelog)
+        - Clear, benefit-focused headline
+        - 2-3 sentences explaining what users can now do
+        - Any action required by users
 
-  ## Internal (for team)
-  - Technical summary
-  - Breaking changes (if any)
-  - Migration notes
-  - Known limitations
+        ## Internal (for team)
+        - Technical summary
+        - Breaking changes (if any)
+        - Migration notes
+        - Known limitations
 
-  ## Social Media (for marketing)
-  - Tweet-length announcement
-  - Key benefit highlight
+        ## Social Media (for marketing)
+        - Tweet-length announcement
+        - Key benefit highlight
 
-capabilities:
-  - release_notes_generation
-  - content_creation
+  capabilities:
+    - release_notes_generation
+    - content_creation
 
-context:
-  required:
-    - issues
-  optional:
-    - documents
+  inputs:
+    - name: issue
+      type: object
+      description: The released feature
 
-human_in_loop:
-  required: true
-  reason: Release notes should be reviewed before publication
+  outputs:
+    - name: customer_facing
+      type: string
+    - name: internal
+      type: string
+    - name: social_media
+      type: string
 
-metadata:
-  output_format: markdown
-  max_tokens: 1200
+  tools: []

@@ -1,5 +1,5 @@
 model_version: "1.0"
-intake:
+intake_form:
   id: feature-request
   name: Feature Request
   description: Submit a feature request or product idea.
