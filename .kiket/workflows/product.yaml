@@ -61,6 +61,22 @@ states:
       required: 1
       approvers:
         - role: product_lead
+    sla:
+      warning: 48h
+      breach: 120h
+      business_hours: true
+      on_warning:
+        - action: notify
+          recipients:
+            user: assignee
+          message: "{{issue.title}} approaching SLA in Review"
+      on_breach:
+        - action: notify
+          recipients:
+            user: assignee
+            roles: [product_lead]
+          message: "SLA BREACH: {{issue.title}} exceeded 120h in Review"
+          level: critical
 
   released:
     type: final
