@@ -7,7 +7,7 @@ board:
   workflow: product
 
 filters:
-  issue_types:
+  case_types:
     - feature
   workflows:
     - product

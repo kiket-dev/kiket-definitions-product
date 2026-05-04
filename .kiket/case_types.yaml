@@ -1,0 +1,31 @@
+model_version: "1.0"
+
+case_types:
+  - key: feature
+    label: Feature
+    allow_children: true
+    color: info
+    icon: stars
+    position: 0
+    active: true
+  - key: enhancement
+    label: Enhancement
+    allow_children: false
+    color: success
+    icon: arrow-up-circle
+    position: 1
+    active: true
+  - key: research
+    label: Research
+    allow_children: false
+    color: warning
+    icon: search
+    position: 2
+    active: true
+  - key: spike
+    label: Spike
+    allow_children: false
+    color: secondary
+    icon: lightning
+    position: 3
+    active: true

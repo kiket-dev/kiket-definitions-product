@@ -23,7 +23,7 @@ project:
     issues:
       - title: Custom dashboard builder for enterprise accounts
         description: Allow enterprise users to create personalized dashboards with drag-and-drop widgets, saved filters, and scheduled email reports.
-        issue_type: feature
+        case_type: feature
         status: in_progress
         priority: high
         labels:
@@ -32,7 +32,7 @@ project:
 
       - title: Improve onboarding wizard completion rate
         description: Current wizard has a 34% drop-off at step 3. Redesign the flow to reduce friction and add progress indicators.
-        issue_type: enhancement
+        case_type: enhancement
         status: evaluating
         priority: high
         labels:
@@ -41,7 +41,7 @@ project:
 
       - title: Research AI-assisted issue categorization approaches
         description: Evaluate LLM-based classification vs rule-based approaches for automatic issue tagging. Compare accuracy, latency, and cost.
-        issue_type: research
+        case_type: research
         status: planned
         priority: medium
         labels:
@@ -50,7 +50,7 @@ project:
 
       - title: Spike on real-time notifications via WebSocket
         description: Prototype a WebSocket-based notification system to replace polling. Measure latency improvement and connection overhead.
-        issue_type: spike
+        case_type: spike
         status: idea
         priority: low
         labels:
@@ -59,7 +59,7 @@ project:
 
       - title: Bulk operations for board card management
         description: Users need to select multiple cards and apply bulk actions like move, assign, label, and archive from the board view.
-        issue_type: feature
+        case_type: feature
         status: review
         priority: medium
         labels:
@@ -68,7 +68,7 @@ project:
 
       - title: Add keyboard shortcuts to command palette
         description: Extend the command palette to show and execute keyboard shortcuts. Include customizable bindings per user.
-        issue_type: enhancement
+        case_type: enhancement
         status: in_progress
         priority: medium
         labels:
