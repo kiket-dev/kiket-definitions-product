@@ -10,13 +10,13 @@ This definition provides product management workflows including:
 - **AI Agents**: Effort estimation, similar feature detection, release notes generation
 - **Intake Form**: Public feature request submission
 - **Board**: Product roadmap board with effort swimlanes
-- **Analytics**: Backlog health, feature requests by theme, release velocity, feedback sentiment
+- **Dashboards**: Backlog health, feature requests by theme, release velocity, feedback sentiment
 
 ## Structure
 
 ```
 .kiket/
-├── project.yaml           # Definition metadata
+├── workspace.yaml           # Definition metadata
 ├── case_types.yaml       # Feature case type
 ├── workflows/
 │   └── product.yaml       # Feature lifecycle workflow

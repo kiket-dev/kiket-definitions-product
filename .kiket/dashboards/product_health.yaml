@@ -1,0 +1,182 @@
+model_version: "1.0"
+dashboard:
+  id: product-health
+  name: Product Health
+  description: Track feature requests, backlog health, and release velocity.
+  widgets:
+    - id: backlog-size-kpi
+      type: kpi
+      title: Backlog Size
+      query: fct_product_backlog
+      query_config:
+        model: fct_product_backlog
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+      options:
+        comparison:
+          interval: "30d"
+
+    - id: feature-requests-trend
+      type: timeseries
+      title: Feature Requests by Week
+      query: fct_feature_requests
+      query_config:
+        model: fct_feature_requests
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+        order_by:
+          - request_week
+      visualization:
+        x: request_week
+        y: request_count
+
+    - id: requests-by-theme
+      type: leaderboard
+      title: Requests by Theme
+      query: fct_feature_requests
+      query_config:
+        model: fct_feature_requests
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+      visualization:
+        group_by: theme
+        value: request_count
+
+    - id: backlog-by-priority
+      type: leaderboard
+      title: Backlog by Priority
+      query: fct_product_backlog
+      query_config:
+        model: fct_product_backlog
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+      visualization:
+        group_by: priority
+        value: item_count
+
+    - id: release-velocity-trend
+      type: timeseries
+      title: Features Released by Month
+      query: fct_product_releases
+      query_config:
+        model: fct_product_releases
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+        order_by:
+          - release_month
+      visualization:
+        x: release_month
+        y: feature_count
+
+    - id: time-to-release
+      type: timeseries
+      title: Average Time to Release (Days)
+      query: fct_product_velocity
+      query_config:
+        model: fct_product_velocity
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+        order_by:
+          - release_month
+      visualization:
+        x: release_month
+        y: avg_days_to_release
+
+    - id: customer-impact-table
+      type: table
+      title: Top Requested Features (by Customer Count)
+      query: fct_feature_requests
+      query_config:
+        model: fct_feature_requests
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+          status: open
+        select:
+          - feature_title
+          - theme
+          - customer_count
+          - total_mrr_impact
+          - days_in_backlog
+        order_by:
+          - customer_count DESC
+        limit: 15
+
+    - id: feedback-sentiment
+      type: timeseries
+      title: Feedback Sentiment Trend
+      query: fct_product_feedback
+      query_config:
+        model: fct_product_feedback
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+        order_by:
+          - feedback_week
+      visualization:
+        x: feedback_week
+        y: avg_sentiment_score
+        series: feedback_source
+
+  alerts:
+    - query: fct_product_backlog
+      query_config:
+        model: fct_product_backlog
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+          priority: critical
+      condition: item_count > 10
+      notify_roles:
+        - manager
+      message: "More than 10 critical items in backlog"
+
+    - query: fct_product_velocity
+      query_config:
+        model: fct_product_velocity
+        parameters:
+          - name: workspace_id
+            type: integer
+            required: true
+        filters:
+          workspace_id: ":workspace_id"
+        order_by:
+          - release_month DESC
+        limit: 1
+      condition: avg_days_to_release > 90
+      notify_roles:
+        - manager
+      message: "Average time to release exceeds 90 days"

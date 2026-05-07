@@ -69,13 +69,13 @@ states:
         - action: notify
           recipients:
             user: assignee
-          message: "{{issue.title}} approaching SLA in Review"
+          message: "{{case.title}} approaching SLA in Review"
       on_breach:
         - action: notify
           recipients:
             user: assignee
             roles: [product_lead]
-          message: "SLA BREACH: {{issue.title}} exceeded 120h in Review"
+          message: "SLA BREACH: {{case.title}} exceeded 120h in Review"
           level: critical
 
   released:
@@ -93,7 +93,7 @@ states:
       - action: notify
         recipients:
           roles: [product, engineering, marketing]
-        message: "🚀 Feature released: ${issue.title}"
+        message: "🚀 Feature released: ${case.title}"
 
   rejected:
     type: final
